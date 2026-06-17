@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.env
+
+# Scan results / output data
+scan_results/
+*.json
+!sample_alerts.json
+!requirements.txt
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

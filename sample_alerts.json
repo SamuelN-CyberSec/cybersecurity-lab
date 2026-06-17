@@ -1,0 +1,52 @@
+[
+    {
+        "title": "Suspicious Login - Multiple Failed Attempts",
+        "severity": "high",
+        "source": "wazuh",
+        "source_ip": "10.0.0.5",
+        "event_type": "authentication_failure",
+        "description": "Multiple failed login attempts detected from internal IP 10.0.0.5 against domain controller"
+    },
+    {
+        "title": "Port Scan Detected from External IP",
+        "severity": "critical",
+        "source": "guardduty",
+        "source_ip": "203.0.113.5",
+        "event_type": "port_scan",
+        "description": "Nmap scan detected from external IP 203.0.113.5 targeting web server subnet"
+    },
+    {
+        "title": "Malware Signature Detected",
+        "severity": "critical",
+        "source": "wazuh",
+        "source_ip": "10.0.1.25",
+        "destination_ip": "198.51.100.10",
+        "event_type": "malware_detection",
+        "description": "Known malware signature detected on endpoint 10.0.1.25 - Potential ransomware indicator"
+    },
+    {
+        "title": "Phishing Email Reported",
+        "severity": "medium",
+        "source": "custom",
+        "source_ip": "192.0.2.50",
+        "event_type": "phishing",
+        "description": "User reported suspicious email with malicious link from external sender"
+    },
+    {
+        "title": "Privilege Escalation Detected",
+        "severity": "high",
+        "source": "wazuh",
+        "source_ip": "10.0.2.100",
+        "event_type": "privilege_escalation",
+        "description": "Unexpected privilege escalation attempt detected on server 10.0.2.100"
+    },
+    {
+        "title": "Data Exfiltration Attempt",
+        "severity": "critical",
+        "source": "guardduty",
+        "source_ip": "10.0.1.25",
+        "destination_ip": "203.0.113.200",
+        "event_type": "exfiltration",
+        "description": "Large outbound data transfer detected from internal host to unknown external IP"
+    }
+]
