@@ -48,7 +48,7 @@ class LogParser:
             'json': self._parse_json_log,
             'csv': self._parse_csv_log,
             'apache': self._parse_apache_log,
-            'firewall': self._parse_syslog,  # Many firewall logs use syslog format
+            'firewall': self._parse_syslog,
         }
         
         parser = parsers.get(log_format, self._parse_syslog)
@@ -59,8 +59,11 @@ class LogParser:
             for line_num, line in enumerate(f, 1):
                 self.statistics['total_lines'] += 1
                 line = line.strip()
-                if not line:
+                if not line or line.startswith('\\'):
                     continue
+                
+                # Strip Windows path backslash artifacts from echo commands
+                line = line.replace('\\\"', '"').replace('\\ ', ' ').replace('\\GET', 'GET')
                 
                 try:
                     entry = parser(line, line_num)
@@ -68,7 +71,6 @@ class LogParser:
                         self.parsed_entries.append(entry)
                         self.statistics['parsed_lines'] += 1
                         
-                        # Update statistics
                         severity = entry.get('severity', 'unknown')
                         self.statistics['severity_counts'][severity] += 1
                         
@@ -79,7 +81,7 @@ class LogParser:
                         self.statistics['event_counts'][event] += 1
                 except Exception as e:
                     self.statistics['error_lines'] += 1
-                    if line_num <= 5:  # Show first 5 errors only
+                    if line_num <= 5:
                         print(f"[!] Parse error line {line_num}: {e}")
         
         print(f"[+] Parsed {self.statistics['parsed_lines']}/{self.statistics['total_lines']} lines")
@@ -95,8 +97,15 @@ class LogParser:
             return 'csv'
         
         # Read first few lines to detect format
+        sample = []
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
-            sample = [next(f).strip() for _ in range(5) if f.readline()]
+            for i in range(5):
+                try:
+                    line = next(f).strip()
+                    if line:
+                        sample.append(line)
+                except StopIteration:
+                    break
         
         for line in sample:
             if line.startswith('{') or line.startswith('['):
